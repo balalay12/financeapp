@@ -4,5 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='index.html')),
-    url(r'^login/$', views.UserLogin.as_view(), name='login')
+    url(r'^login/$', views.UserLogin.as_view(), name='login'),
+    url(r'^registration/$', views.UserRegistration.as_view(), name='registration')
 ]

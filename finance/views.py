@@ -2,6 +2,7 @@ from django.views.generic.edit import FormView
 from django.contrib.auth import login
 from . import forms
 
+
 class UserLogin(FormView):
     template_name = 'login.html'
     form_class = forms.LoginForm
@@ -14,5 +15,10 @@ class UserLogin(FormView):
 
 
 class UserRegistration(FormView):
-    tempalte_name = 'reg.html'
+    template_name = 'reg.html'
     form_class = forms.RegForm
+    success_url = '/login/'
+
+    def form_valid(self, form):
+        form.save()
+        return super(UserRegistration, self).form_valid(form)

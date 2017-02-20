@@ -1,24 +1,16 @@
 # -*- coding: utf-8 -*-
 
-from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
-class LoginForm(forms.Form):
-    username = forms.CharField(required=True)
-    password = forms.CharField(required=True)
 
-    def clean(self):
-        # cleaned_data = super(LoginForm, self).clean()
-        if not self.errors:
-            user = authenticate(username=self.cleaned_data.get('username'), password=self.cleaned_data.get('password'))
-            if user is None:
-                raise forms.ValidationError('Имя пользователя и пароль не подходят')
-            self.user = user
-        return cleaned_data
+class LoginForm(AuthenticationForm):
+    error_messages = {
+        'invalid_login': "Пожалуйста введите корректные данные пользователя.",
+        'inactive': "Этот пользователь не активен.",
+    }
 
-    def get_user(self):
-        return self.user or None
 
-class RegForm(forms.Form):
-    pass
+class RegForm(UserCreationForm):
+    error_messages = {
+        'password_mismatch': "Пароли не совпадают.",
+    }

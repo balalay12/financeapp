@@ -1,5 +1,30 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    test
+    <form class="reg-form" method="POST">
+        {% csrf_token %}
+        <h3>Войдите</h3>
+        <label for="inputName" class="sr-only">Имя пользователя</label>
+        <input id="inputName" name="username" type="text"  class="form-control" placeholder="Имя пользователя" required="">
+        <label for="inputPassword" class="sr-only">Пароль</label>
+        <input id="inputPassword" name="password1" type="password"  class="form-control" placeholder="Пароль" required="">
+        <label for="confirmPassword" class="sr-only">Пароль</label>
+        <input id="confirmPassword" name="password2" type="password"  class="form-control" placeholder="Повторите пароль" required="">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
+    </form>
+
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
