@@ -1,5 +1,89 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>base html</h1>
+    {% if user.is_authenticated %}
+        <div class="card-group">
+                <div class="card">
+                    <h4 class="card-header">Счета</h4>
+                    <div class="card-block">
+                        {% if accounts %}
+                            <table class="table">
+                                <thead class="thead-inverse">
+                                    <tr>
+                                        <th>Имя</th>
+                                        <th>Сумма</th>
+                                    </tr>
+                                </thead>
+                                {% for acc in accounts %}
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ acc.name}}</td>
+                                            <td>{{ acc.score}}</td>
+                                        </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            карточек нет
+                        {% endif %}
+                        <h4>Итого: {{ accounts_sum.score__sum }}</h4>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#newAccount">Добавить счет</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h4 class="card-header">За месяц</h4>
+                    <div class="card-block">
+                        {% if accounts %}
+                            <table class="table">
+                                {% for acc in accounts %}
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ acc.name}}</td>
+                                            <td>{{ acc.score}}</td>
+                                        </tr>
+                                    </tbody>
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            карточек нет
+                        {% endif %}
+                        <h4>Итого: {{ accounts_sum.score__sum }}</h4>
+                        <a href="#" class="card-link">Card link</a>
+                        <a href="#" class="card-link">Another link</a>
+                    </div>
+                </div>
+
+        </div>
+    {% else %}
+        <h1>Вы не авторизованы</h1>
+        <h3>Если у вас уже есть учетная запись, то перейдите на страницу <a href="/login/">входа</a></h3>
+        <h3>Если у вас еще нет учетной записи, то перейдите на страницу <a href="/registration/">регистрации</a><h3>
+    {% endif %}
+
+<!-- Modal -->
+<div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Новый счет</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="/accounts/add/" method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+                <label for="inputName" class="sr-only">Название</label>
+                <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="">
+                <label for="inputScore" class="sr-only">Пароль</label>
+                <input id="inputScore" name="score" type="number"  class="form-control" placeholder="Название" required="">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}

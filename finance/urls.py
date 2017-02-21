@@ -1,9 +1,9 @@
 from django.conf.urls import url
-from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^$', views.Index.as_view(), name='index'),
     url(r'^login/$', views.UserLogin.as_view(), name='login'),
-    url(r'^registration/$', views.UserRegistration.as_view(), name='registration')
+    url(r'^registration/$', views.UserRegistration.as_view(), name='registration'),
+    url(r'^accounts/add/$', views.AccountsCreate.as_view(), name='new_account')
 ]

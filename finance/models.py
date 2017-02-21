@@ -13,9 +13,6 @@ class Accounts(models.Model):
     name = models.CharField(max_length=250)
     score = models.FloatField()
 
-    def __str__(self):
-        return self.owner
-
 
 class Balance(models.Model):
     OPERATIONS_TYPE = (
@@ -28,3 +25,4 @@ class Balance(models.Model):
     amount = models.FloatField()
     category = models.ForeignKey(Categories)
     user = models.ForeignKey('auth.User')
+    account = models.ForeignKey(Accounts, null=True)
