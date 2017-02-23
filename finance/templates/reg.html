@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form class="reg-form" method="POST">
+    <form class="form-signin" method="POST">
         {% csrf_token %}
-        <h3>Войдите</h3>
+        <h3>Регистрация</h3>
         <label for="inputName" class="sr-only">Имя пользователя</label>
         <input id="inputName" name="username" type="text"  class="form-control" placeholder="Имя пользователя" required="">
         <label for="inputPassword" class="sr-only">Пароль</label>
-        <input id="inputPassword" name="password1" type="password"  class="form-control" placeholder="Пароль" required="">
+        <input id="inputPassword" name="password1" type="password"  class="form-control middle-input" placeholder="Пароль" required="">
         <label for="confirmPassword" class="sr-only">Пароль</label>
-        <input id="confirmPassword" name="password2" type="password"  class="form-control" placeholder="Повторите пароль" required="">
+        <input id="confirmPassword" name="password2" type="password"  class="form-control last-input" placeholder="Повторите пароль" required="">
         <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
     </form>
 

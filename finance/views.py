@@ -2,7 +2,7 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db.models import Sum
 from django.views.generic import ListView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, DeleteView
 from . import forms, models
 
 
@@ -49,3 +49,8 @@ class AccountsCreate(CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(AccountsCreate, self).form_valid(form)
+
+
+class AccountDelete(DeleteView):
+    model = models.Accounts
+    success_url = '/'

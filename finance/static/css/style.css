@@ -1,11 +1,29 @@
-.login-form {
-    max-width: 300px;
+.form-signin {
+    max-width: 500px;
     padding: 15px;
     margin: 0 auto;
 }
 
-.reg-form {
-    max-width: 300px;
-    padding: 15px;
-    margin: 0 auto;
+.form-heading {
+    margin-bottom: 10px;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.middle-input {
+    margin-bottom: -1px;
+    margin-top: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.last-input {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
