@@ -45,23 +45,8 @@
                 <div class="card">
                     <h4 class="card-header">За месяц</h4>
                     <div class="card-block">
-                        {% if accounts %}
-                            <table class="table">
-                                {% for acc in accounts %}
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ acc.name}}</td>
-                                            <td>{{ acc.score}}</td>
-                                        </tr>
-                                    </tbody>
-                                {% endfor %}
-                            </table>
-                        {% else %}
-                            карточек нет
-                        {% endif %}
-                        <h4>Итого: {{ accounts_sum.score__sum }}</h4>
-                        <a href="#" class="card-link">Card link</a>
-                        <a href="#" class="card-link">Another link</a>
+                        <p>Здесь будут суммы доходов и расходов за месяц</p>
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#newOperation">Добавить операцию</button>
                     </div>
                 </div>
 
@@ -73,6 +58,8 @@
     {% endif %}
 
 <!-- Modal -->
+
+<!-- New account form -->
 <div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -99,6 +86,7 @@
   </div>
 </div>
 
+<!-- Delete account form -->
 <div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -121,4 +109,40 @@
     </div>
   </div>
 </div>
+
+<!-- New operation form -->
+<div class="modal fade" id="newOperation" tabindex="-1" role="dialog" aria-labelledby="newOperationLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="newOperationLabel">Новая операция</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="newOperationForm" method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="inputDate" class="sr-only">Дата</label>
+                <input id="inputDate" name="name" type="date"  class="form-control" placeholder="Дата" required="">
+            </div>
+            <div class="form-group">
+                <label for="selectAccount" class="sr-only">Счет</label>
+                <select class="form-controll" id="selectAccount">
+                    {% for acc in accounts %}
+                        <option value="acc.id">{{ acc.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 {% endblock %}
