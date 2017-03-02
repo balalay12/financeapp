@@ -2,54 +2,61 @@
 
 {% block content %}
     {% if user.is_authenticated %}
-        <div class="card-group">
-                <div class="card">
-                    <h4 class="card-header">Счета</h4>
-                    <div class="card-block">
-                        {% if accounts %}
-                            <table class="table table-sm">
-                                <thead class="thead-inverse">
+        <div class="row equal">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Счета</div>
+                    {% if accounts %}
+                        <table class="table table-sm">
+                            <thead class="thead-inverse">
+                                <tr>
+                                    <th class="col-md-4">Имя</th>
+                                    <th class="col-md-4">Сумма</th>
+                                    <th class="col-md-4"></th>
+                                </tr>
+                            </thead>
+                            {% for acc in accounts %}
+                                <tbody>
                                     <tr>
-                                        <th class="col-md-4">Имя</th>
-                                        <th class="col-md-4">Сумма</th>
-                                        <th class="col-md-4"></th>
+                                        <td>{{ acc.name}}</td>
+                                        <td>{{ acc.score}}</td>
+                                        <td>
+                                            <!-- TODO: make only one icon 'edit' where user can delete and edit -->
+                                            <div class="btn-group" role="group">
+                                                <button class="btn btn-sm btn-outline-info">Изменить</button>
+                                                <button
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        data-toggle="modal"
+                                                        data-target="#deleteAccount"
+                                                        data-account="{{acc.name}} {{acc.id}}"
+                                                 >Удалить</button>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                {% for acc in accounts %}
-                                    <tbody>
-                                        <tr>
-                                            <td>{{ acc.name}}</td>
-                                            <td>{{ acc.score}}</td>
-                                            <td>
-                                                <div class="btn-group" role="group">
-                                                    <button class="btn btn-sm btn-outline-info">Изменить</button>
-                                                    <button
-                                                            class="btn btn-sm btn-outline-danger"
-                                                            data-toggle="modal"
-                                                            data-target="#deleteAccount"
-                                                            data-account="{{acc.name}} {{acc.id}}"
-                                                     >Удалить</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                {% endfor %}
-                            </table>
-                        <h4>Итого: {{ accounts_sum.score__sum }}</h4>
-                        {% else %}
+                                </tbody>
+                            {% endfor %}
+                        </table>
+                        <div class="panel-body">
+                            <h4>Итого: {{ accounts_sum.score__sum }}</h4>
+                        </div>
+                    {% else %}
+                        <div class="panel-body">
                             счетов нет
-                        {% endif %}
+                        </div>
+                    {% endif %}
+                    <div class="panel-footer">
                         <button class="btn btn-primary" data-toggle="modal" data-target="#newAccount">Добавить счет</button>
                     </div>
                 </div>
-                <div class="card">
-                    <h4 class="card-header">За месяц</h4>
-                    <div class="card-block">
-                        <p>Здесь будут суммы доходов и расходов за месяц</p>
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#newOperation">Добавить операцию</button>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">За месяц</div>
+                    <div class="panel-body">
+                        Panel content
                     </div>
                 </div>
-
+            </div>
         </div>
     {% else %}
         <h1>Вы не авторизованы</h1>
@@ -60,6 +67,7 @@
 <!-- Modal -->
 
 <!-- New account form -->
+<!-- TODO: rewrite forms -->
 <div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
