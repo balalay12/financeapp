@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="inputName" class="sr-only">Название</label>
+            <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="" value="{{ accounts.name }}">
+        </div>
+        <div class="form-group">
+            <label for="inputScore" class="sr-only">Сумма</label>
+            <input id="inputScore" name="score" type="number"  class="form-control" placeholder="Сумма" required="" value="{{ accounts.score | floatformat }}">
+        </div>
+        <a href="/" class="btn btn-secondary">Закрыть</a>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+{% endblock %}

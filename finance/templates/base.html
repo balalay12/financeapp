@@ -17,6 +17,14 @@
     <nav class="navbar navbar-inverse bg-inverse">
         <div class="container">
             <a class="navbar-brand" href="/">Finance App</a>
+            {% if user.is_authenticated %}
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text">{{ request.user.username }}</p>
+                </li>
+                <li><a href="/logout/">Выйти</a></li>
+            </ul>
+            {% endif %}
         </div>
     </nav>
 

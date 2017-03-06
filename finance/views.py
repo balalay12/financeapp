@@ -1,8 +1,9 @@
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db.models import Sum
 from django.views.generic import ListView
-from django.views.generic.edit import FormView, CreateView, DeleteView
+from django.views.generic.base import RedirectView
+from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from . import forms, models
 
 
@@ -27,6 +28,14 @@ class UserRegistration(FormView):
         return super(UserRegistration, self).form_valid(form)
 
 
+class UserLogout(RedirectView):
+    url = '/'
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return super(UserLogout, self).get(request, *args, **kwargs)
+
+
 class Index(ListView):
     template_name = 'index.html'
     accounts = {}
@@ -49,6 +58,13 @@ class AccountsCreate(CreateView):
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(AccountsCreate, self).form_valid(form)
+
+
+class AccountUpdate(UpdateView):
+    model = models.Accounts
+    fields = ['name', 'score']
+    template_name = 'accounts_update_form.html'
+    success_url = '/'
 
 
 class AccountDelete(DeleteView):
