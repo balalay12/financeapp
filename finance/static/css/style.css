@@ -28,8 +28,19 @@
     border-top-right-radius: 0;
 }
 
-.equal, .equal > div[class*='col-'] {
-    display: -webkit-flex;
-    display: flex;
-    flex:1 1 auto;
+.equal {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+div[class*='col-'] {
+  flex:1 1 auto;
+  /*background: lightblue;*/
+  display: flex;
+}
+.panel {
+  flex:1 0 100%;
 }
