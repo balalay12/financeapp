@@ -20,7 +20,7 @@
             {% if user.is_authenticated %}
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <p class="navbar-text">{{ request.user.username }}</p>
+                    <p class="navbar-text">{{ request.user.username | upper }}</p>
                 </li>
                 <li><a href="/logout/">Выйти</a></li>
             </ul>

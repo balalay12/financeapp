@@ -39,14 +39,17 @@ class UserLogout(RedirectView):
 class Index(ListView):
     template_name = 'index.html'
     accounts = {}
+    balance = {}
 
     def get_queryset(self):
         self.accounts = models.Accounts.objects.filter(owner=self.request.user.id)
+        self.balance = models.Balance.objects.filter(user=self.request.user.id)
 
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
         ctx['accounts'] = self.accounts
         ctx['accounts_sum'] = self.accounts.aggregate(Sum('score'))
+        ctx['balance'] = self.balance
         return ctx
 
 
@@ -70,3 +73,22 @@ class AccountUpdate(UpdateView):
 class AccountDelete(DeleteView):
     model = models.Accounts
     success_url = '/'
+
+
+class BalanceCreate(CreateView):
+    model = models.Balance
+    fields = ('date', 'operation', 'amount', 'category', 'account')
+    template_name = 'balance_new_form.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        # TODO: уменьшать сумму счета при расходной операции
+        # TODO: проверять хватает ли денег на счету для операции
+        return super(BalanceCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BalanceCreate, self).get_context_data(**kwargs)
+        ctx['categories'] = models.Categories.objects.all()
+        ctx['accounts'] = models.Accounts.objects.filter(owner=self.request.user.id)
+        return ctx

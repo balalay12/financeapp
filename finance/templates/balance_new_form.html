@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form id="newOperationForm" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="inputDate">Дата</label>
+            <input id="inputDate" name="date" type="date"  class="form-control" placeholder="Дата" required="">
+        </div>
+        <div class="form-group">
+            <label for="selectAccount">Счет</label>
+            <select class="form-control" id="selectAccount" name="account">
+                {% for acc in accounts %}
+                    <option value="{{ acc.id }}">{{ acc.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectCategory">Категория</label>
+            <select class="form-control" id="selectCategory" name="category">
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputAmount">Сумма</label>
+            <input id="inputAmount" name="amount" type="number"  class="form-control" placeholder="Сумма" required="">
+        </div>
+        <input type="hidden" name="operation" value="C">
+        <a href="/" class="btn btn-secondary">Закрыть</a>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+
+{% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

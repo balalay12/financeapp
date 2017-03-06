@@ -3,6 +3,8 @@
 {% block content %}
     {% if user.is_authenticated %}
         <div class="row equal">
+
+            <!-- Panel 1 -->
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">Счета</div>
@@ -51,15 +53,21 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Panel 2 -->
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">За месяц</div>
                     <div class="panel-body">
                         Panel content
                     </div>
+                    <div class="panel-footer ">
+                        <a href="/balance/add/" class="btn btn-primary">Добавить расход</a>
+                    </div>
                 </div>
             </div>
         </div>
+        {{ balance }}
     {% else %}
         <h1>Вы не авторизованы</h1>
         <h3>Если у вас уже есть учетная запись, то перейдите на страницу <a href="/login/">входа</a></h3>
@@ -69,7 +77,6 @@
 <!-- Modal -->
 
 <!-- New account form -->
-<!-- TODO: rewrite forms -->
 <div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -118,41 +125,6 @@
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
             <button type="submit" class="btn btn-primary">Удалить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- New operation form -->
-<div class="modal fade" id="newOperation" tabindex="-1" role="dialog" aria-labelledby="newOperationLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newOperationLabel">Новая операция</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="newOperationForm" method="POST">
-        {% csrf_token %}
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="inputDate" class="sr-only">Дата</label>
-                <input id="inputDate" name="name" type="date"  class="form-control" placeholder="Дата" required="">
-            </div>
-            <div class="form-group">
-                <label for="selectAccount" class="sr-only">Счет</label>
-                <select class="form-controll" id="selectAccount">
-                    {% for acc in accounts %}
-                        <option value="acc.id">{{ acc.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary">Сохранить</button>
         </div>
       </form>
     </div>
