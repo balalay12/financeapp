@@ -1,8 +1,7 @@
-{% extends 'base.html' %}
+{% extends 'base.jinja2' %}
 
 {% block content %}
     <form id="newOperationForm" method="POST">
-        {% csrf_token %}
         <div class="form-group">
             <label for="inputDate">Дата</label>
             <input id="inputDate" name="date" type="date"  class="form-control" placeholder="Дата" required="">
@@ -28,6 +27,7 @@
             <input id="inputAmount" name="amount" type="number"  class="form-control" placeholder="Сумма" required="">
         </div>
         <input type="hidden" name="operation" value="C">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
         <a href="/" class="btn btn-secondary">Закрыть</a>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>

@@ -8,7 +8,7 @@ from . import forms, models
 
 
 class UserLogin(FormView):
-    template_name = 'login.html'
+    template_name = 'login.jinja2'
     form_class = AuthenticationForm
     success_url = '/'
 
@@ -19,7 +19,7 @@ class UserLogin(FormView):
 
 
 class UserRegistration(FormView):
-    template_name = 'reg.html'
+    template_name = 'reg.jinja2'
     form_class = UserCreationForm
     success_url = '/login/'
 
@@ -66,7 +66,7 @@ class AccountsCreate(CreateView):
 class AccountUpdate(UpdateView):
     model = models.Accounts
     fields = ['name', 'score']
-    template_name = 'accounts_update_form.html'
+    template_name = 'accounts_update_form.jinja2'
     success_url = '/'
 
 
@@ -78,7 +78,7 @@ class AccountDelete(DeleteView):
 class BalanceCreate(CreateView):
     model = models.Balance
     fields = ('date', 'operation', 'amount', 'category', 'account')
-    template_name = 'balance_new_form.html'
+    template_name = 'balance_new_form.jinja2'
     success_url = '/'
 
     def form_valid(self, form):
