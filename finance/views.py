@@ -37,7 +37,7 @@ class UserLogout(RedirectView):
 
 
 class Index(ListView):
-    template_name = 'index.html'
+    template_name = 'index.jinja2'
     accounts = {}
     balance = {}
 
