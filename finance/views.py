@@ -15,7 +15,7 @@ class UserLogin(FormView):
     def form_valid(self, form):
         if form.get_user():
             login(self.request, form.get_user())
-            return super(UserLogin, self).form_valid(form) 
+            return super(UserLogin, self).form_valid(form)
 
 
 class UserRegistration(FormView):
@@ -57,7 +57,7 @@ class AccountsCreate(CreateView):
     model = models.Accounts
     fields = ('name', 'score')
     success_url = '/'
-    
+
     def form_valid(self, form):
         form.instance.owner = self.request.user
         return super(AccountsCreate, self).form_valid(form)
@@ -77,14 +77,20 @@ class AccountDelete(DeleteView):
 
 class BalanceCreate(CreateView):
     model = models.Balance
-    fields = ('date', 'operation', 'amount', 'category', 'account')
+    # fields = ('date', 'operation', 'amount', 'category', 'account')
     template_name = 'balance_new_form.jinja2'
     success_url = '/'
+    form_class = forms.BalanceForm
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        # TODO: уменьшать сумму счета при расходной операции
-        # TODO: проверять хватает ли денег на счету для операции
+        # account = form.cleaned_data['account']
+        # amount = form.cleaned_data['amount']
+        # if account.score < amount:
+        #     raise ValidationError('Недостаточная сумма на счету')
+        # if form.cleaned_data['operation'] == 'C':
+        #     account.score -= amount
+        #     account.save()
         return super(BalanceCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Categories(models.Model):
+    # TODO: set choices for categoy
     name = models.CharField(max_length=250)
 
     def __str__(self):
@@ -16,8 +17,8 @@ class Accounts(models.Model):
 
 class Balance(models.Model):
     OPERATIONS_TYPE = (
-        ('I', 'Income'),
-        ('C', 'Costs')
+        ('I', 'Доход'),
+        ('C', 'Расход')
     )
 
     date = models.DateField()
