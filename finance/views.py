@@ -77,7 +77,6 @@ class AccountDelete(DeleteView):
 
 class BalanceCreate(CreateView):
     model = models.Balance
-    # fields = ('date', 'operation', 'amount', 'category', 'account')
     template_name = 'balance_new_form.jinja2'
     success_url = '/'
     form_class = forms.BalanceForm
@@ -88,7 +87,6 @@ class BalanceCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BalanceCreate, self).get_context_data(**kwargs)
-        ctx['inc_categories'] = models.Categories.objects.filter(operation_type='I')
-        ctx['cost_categories'] = models.Categories.objects.filter(operation_type='C')
+        ctx['categories'] = models.Categories.objects.filter(operation_type=self.request.GET['type'])
         ctx['accounts'] = models.Accounts.objects.filter(owner=self.request.user.id)
         return ctx

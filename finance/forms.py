@@ -6,7 +6,7 @@ from .models import Balance
 class BalanceForm(ModelForm):
     class Meta:
         model = Balance
-        fields = ('date', 'operation', 'amount', 'category', 'account')
+        fields = ('date', 'amount', 'category', 'account', 'operation')
 
     def clean(self):
         cleaned_data = super(BalanceForm, self).clean()
@@ -15,8 +15,10 @@ class BalanceForm(ModelForm):
         if cleaned_data['operation'] == 'C':
             if account.score < amount:
                 raise ValidationError('Недостаточная сумма на счету')
+            print(account.score)
             account.score -= amount
             account.save()
-        account.score += amount
-        account.save()
+        else:
+            account.score += amount
+            account.save()
         return cleaned_data
