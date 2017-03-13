@@ -84,17 +84,11 @@ class BalanceCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        # account = form.cleaned_data['account']
-        # amount = form.cleaned_data['amount']
-        # if account.score < amount:
-        #     raise ValidationError('Недостаточная сумма на счету')
-        # if form.cleaned_data['operation'] == 'C':
-        #     account.score -= amount
-        #     account.save()
         return super(BalanceCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
         ctx = super(BalanceCreate, self).get_context_data(**kwargs)
-        ctx['categories'] = models.Categories.objects.all()
+        ctx['inc_categories'] = models.Categories.objects.filter(operation_type='I')
+        ctx['cost_categories'] = models.Categories.objects.filter(operation_type='C')
         ctx['accounts'] = models.Accounts.objects.filter(owner=self.request.user.id)
         return ctx

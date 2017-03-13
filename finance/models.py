@@ -1,9 +1,13 @@
 from django.db import models
 
+OPERATIONS_TYPE = (
+    ('I', 'Доход'),
+    ('C', 'Расход')
+)
 
 class Categories(models.Model):
-    # TODO: set choices for categoy
     name = models.CharField(max_length=250)
+    operation_type = models.CharField(max_length=1, choices=OPERATIONS_TYPE, default='C')
 
     def __str__(self):
         return self.name
@@ -16,11 +20,6 @@ class Accounts(models.Model):
 
 
 class Balance(models.Model):
-    OPERATIONS_TYPE = (
-        ('I', 'Доход'),
-        ('C', 'Расход')
-    )
-
     date = models.DateField()
     operation = models.CharField(max_length=1, choices=OPERATIONS_TYPE)
     amount = models.FloatField()
