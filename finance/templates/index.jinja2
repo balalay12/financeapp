@@ -76,6 +76,7 @@
                       <th>Категория</th>
                       <th>Сумма</th>
                       <th>Операция</th>
+                      <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +87,10 @@
                       <td>{{ item.category }}</td>
                       <td>{{ item.amount }}</td>
                       <td>{{ item.get_operation_display() }}</td>
+                      <td>
+                        <a href="/balance/update/{{ item.id }}/?type={{ item.operation}}" class="btn btn-sm btn-outline-info">
+                            <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                        </a></td>
                     </tr>
                   {% endfor %}
                 </tbody>

@@ -1,0 +1,41 @@
+{% extends 'base.jinja2' %}
+
+{% block content %}
+    <form id="newOperationForm" method="POST">
+        <div class="form-group">
+            <label for="inputDate">Дата</label>
+            <input id="inputDate" name="date" type="date"  class="form-control" placeholder="Дата" required="" value="{{ balance.date }}">
+        </div>
+        <div class="form-group">
+            <label for="selectAccount">Счет</label>
+            <select class="form-control" id="selectAccount" name="account">
+                <option disabled selected value> -- выберите счет -- </option>
+                {% for acc in accounts %}
+                    <option value="{{ acc.id }}"
+                    {% if acc == balance.account %}selected="selected"{% endif %}>{{ acc.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectCategory">Категория</label>
+            <select class="form-control" id="selectCategory" name="category">
+                <option disabled selected value> -- выберите категорию -- </option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}"
+                    {% if category == balance.category %}selected="selected"{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="inputAmount">Сумма</label>
+            <input id="inputAmount" name="amount" type="number"  class="form-control" placeholder="Сумма" value="{{ balance.amount }}" required="">
+        </div>
+        <input type="hidden" name="operation" value="{{ request.GET['type'] }}">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <a href="/" class="btn btn-secondary">Закрыть</a>
+        <a href="/balance/delete/{{ balance.id }}" class="btn btn-danger">Удалить</a>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </form>
+
+    {% include 'form_errors.jinja2' %}
+{% endblock %}

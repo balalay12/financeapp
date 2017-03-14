@@ -101,3 +101,26 @@ class BalanceCreate(CreateView):
         ctx['accounts'] = models.Accounts.objects.filter(
             owner=self.request.user.id)
         return ctx
+
+
+class BalanceUpdate(UpdateView):
+    model = models.Balance
+    success_url = '/'
+    form_class = forms.BalanceUpdateForm
+    template_name = 'forms/balance_update_form.jinja2'
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BalanceUpdate, self).get_context_data(**kwargs)
+        ctx['accounts'] = models.Accounts.objects.filter(
+            owner=self.request.user.id)
+        ctx['categories'] = models.Categories.objects.filter(
+            operation_type=self.request.GET['type'])
+        return ctx
+
+
+class BalanceDelete(DeleteView):
+    model = models.Balance
+    success_url = '/'
+
+    def get(self, request, *args, **kwargs):
+        return self.post(request, *args, **kwargs)

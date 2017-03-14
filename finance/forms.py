@@ -22,3 +22,12 @@ class BalanceForm(ModelForm):
             account.score += amount
             account.save()
         return cleaned_data
+
+
+class BalanceUpdateForm(ModelForm):
+    class Meta:
+        model = Balance
+        fields = ('date', 'amount', 'category', 'account', 'operation')
+
+    def clead(self):
+        pass
