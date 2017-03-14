@@ -99,94 +99,9 @@
 <!-- Modal -->
 
 <!-- New account form -->
-<!-- TODO: rewrite forms -->
-<div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newAccountLabel">Новый счет</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="/accounts/add/" method="POST">
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="inputName" class="sr-only">Название</label>
-                <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="">
-            </div>
-            <div class="form-group">
-                <label for="inputScore" class="sr-only">Сумма</label>
-                <input id="inputScore" name="score" type="number"  class="form-control" placeholder="Сумма" required="">
-            </div>
-        </div>
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+{% include 'forms/accounts_new_form.jinja2' %}
 
 <!-- Delete account form -->
-<div class="modal fade" id="deleteAccount" tabindex="-1" role="dialog" aria-labelledby="deleteAccountLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="deleteAccountLabel">Удаление счета</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="deleteAccountForm" method="POST">
-        <div class="modal-body">
-            <p></p>
-            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary">Удалить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<!-- New operation form -->
-<div class="modal fade" id="newOperation" tabindex="-1" role="dialog" aria-labelledby="newOperationLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newOperationLabel">Новая операция</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form id="newOperationForm" method="POST">
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="inputDate" class="sr-only">Дата</label>
-                <input id="inputDate" name="name" type="date"  class="form-control" placeholder="Дата" required="">
-            </div>
-            <div class="form-group">
-                <label for="selectAccount" class="sr-only">Счет</label>
-                <select class="form-controll" id="selectAccount">
-                    {% for acc in accounts %}
-                        <option value="acc.id">{{ acc.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+{% include 'forms/accounts_delete_form.jinja2' %}
 
 {% endblock %}
