@@ -49,7 +49,7 @@ class Index(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
         ctx['accounts'] = self.accounts
-        ctx['accounts_sum'] = self.accounts.aggregate(Sum('score'))
+        ctx['accounts_sum'] = self.accounts.filter(status='A').aggregate(Sum('score'))
         ctx['balance'] = self.balance
         ctx['total_cost'] = self.balance.filter(
             operation='C',
@@ -79,9 +79,15 @@ class AccountUpdate(UpdateView):
     success_url = '/'
 
 
-class AccountDelete(DeleteView):
-    model = models.Accounts
-    success_url = '/'
+class AccountDelete(RedirectView):
+    url = '/'
+
+    def get(self, request, *args, **kwargs):
+        account = models.Accounts.objects.get(pk=kwargs['pk'])
+        print(account)
+        account.status = 'I'
+        account.save()
+        return super(AccountDelete, self).get(request, *args, **kwargs)
 
 
 class BalanceCreate(CreateView):

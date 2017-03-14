@@ -14,9 +14,15 @@ class Categories(models.Model):
 
 
 class Accounts(models.Model):
+    STATUS=(
+        ('I', 'Не используется'),
+        ('A', 'Используется')
+    )
+
     owner = models.ForeignKey('auth.User')
     name = models.CharField(max_length=250)
     score = models.FloatField()
+    status = models.CharField(max_length=1, choices=STATUS, default='A')
 
 
 class Balance(models.Model):
