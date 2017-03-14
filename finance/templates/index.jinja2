@@ -56,7 +56,8 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">За месяц</div>
                     <div class="panel-body">
-                        Panel content
+                        <p>Всего пришло: {{ total_incom.amount__sum or 0 }}</p>
+                        <p>Всего потрачено: {{ total_cost.amount__sum or 0 }}</p>
                     </div>
                     <div class="panel-footer ">
                         <a href="/balance/add/?type=I" class="btn btn-primary">Добавить доход</a>

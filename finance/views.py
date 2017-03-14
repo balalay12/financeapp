@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.db.models import Sum
@@ -50,6 +51,14 @@ class Index(ListView):
         ctx['accounts'] = self.accounts
         ctx['accounts_sum'] = self.accounts.aggregate(Sum('score'))
         ctx['balance'] = self.balance
+        ctx['total_cost'] = self.balance.filter(
+            operation='C',
+            date__month=datetime.date.today().month,
+            date__year=datetime.date.today().year).aggregate(Sum('amount'))
+        ctx['total_incom'] = self.balance.filter(
+            operation='I',
+            date__month=datetime.date.today().month,
+            date__year=datetime.date.today().year).aggregate(Sum('amount'))
         return ctx
 
 
@@ -87,6 +96,8 @@ class BalanceCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         ctx = super(BalanceCreate, self).get_context_data(**kwargs)
-        ctx['categories'] = models.Categories.objects.filter(operation_type=self.request.GET['type'])
-        ctx['accounts'] = models.Accounts.objects.filter(owner=self.request.user.id)
+        ctx['categories'] = models.Categories.objects.filter(
+            operation_type=self.request.GET['type'])
+        ctx['accounts'] = models.Accounts.objects.filter(
+            owner=self.request.user.id)
         return ctx
