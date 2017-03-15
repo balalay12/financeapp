@@ -1,6 +1,7 @@
 import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django.views.generic import ListView
 from django.views.generic.base import RedirectView
@@ -84,7 +85,6 @@ class AccountDelete(RedirectView):
 
     def get(self, request, *args, **kwargs):
         account = models.Accounts.objects.get(pk=kwargs['pk'])
-        print(account)
         account.status = 'I'
         account.save()
         return super(AccountDelete, self).get(request, *args, **kwargs)
@@ -105,20 +105,22 @@ class BalanceCreate(CreateView):
         ctx['categories'] = models.Categories.objects.filter(
             operation_type=self.request.GET['type'])
         ctx['accounts'] = models.Accounts.objects.filter(
-            owner=self.request.user.id)
+            owner=self.request.user.id,
+            status='A')
         return ctx
 
 
 class BalanceUpdate(UpdateView):
     model = models.Balance
-    success_url = '/'
     form_class = forms.BalanceUpdateForm
+    success_url = '/'
     template_name = 'forms/balance_update_form.jinja2'
 
     def get_context_data(self, **kwargs):
         ctx = super(BalanceUpdate, self).get_context_data(**kwargs)
         ctx['accounts'] = models.Accounts.objects.filter(
-            owner=self.request.user.id)
+            owner=self.request.user.id,
+            status='A')
         ctx['categories'] = models.Categories.objects.filter(
             operation_type=self.request.GET['type'])
         return ctx

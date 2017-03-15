@@ -15,7 +15,6 @@ class BalanceForm(ModelForm):
         if cleaned_data['operation'] == 'C':
             if account.score < amount:
                 raise ValidationError('Недостаточная сумма на счету')
-            print(account.score)
             account.score -= amount
             account.save()
         else:
@@ -29,5 +28,39 @@ class BalanceUpdateForm(ModelForm):
         model = Balance
         fields = ('date', 'amount', 'category', 'account', 'operation')
 
-    def clead(self):
-        pass
+    def clean(self):
+        cleaned_data = super(BalanceUpdateForm, self).clean()
+        account = cleaned_data['account']
+        amount = cleaned_data['amount']
+        if cleaned_data['operation'] == 'C':
+            if account.id is not self.instance.account.id:
+                if  account.score < amount:
+                    raise ValidationError('Недостаточная сумма на счету')
+                self.instance.account.score += self.instance.amount
+                account.score -= amount
+                self.instance.account.save()
+                account.save()
+            else:
+                if amount > self.instance.amount:
+                    if account.score - amount <= 0:
+                        raise ValidationError('Недостаточная сумма на счету')
+                    account.score -= (amount - self.instance.amount)
+                    account.save()
+                else:
+                    print(self.instance.amount - amount)
+                    account.score += (self.instance.amount - amount)
+                    account.save()
+        if cleaned_data['operation'] == 'I':
+            if account.id is not self.instance.account.id:
+                self.instance.account.score -= self.instance.amount
+                account.score += amount
+                self.instance.account.save()
+                account.save()
+            else:
+                if amount > self.instance.amount:
+                    account.score -= (self.instance.amount - amount)
+                    account.save()
+                else:
+                    account.score += (amount - self.instance.amount)
+                    account.save()
+        return cleaned_data
