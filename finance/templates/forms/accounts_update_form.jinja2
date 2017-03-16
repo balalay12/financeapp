@@ -1,7 +1,7 @@
 {% extends 'base.jinja2' %}
 
 {% block content %}
-    <form method="POST">
+    <form class="form-signin" method="POST">
         <div class="form-group">
             <label for="inputName" class="sr-only">Название</label>
             <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="" value="{{ accounts.name }}">

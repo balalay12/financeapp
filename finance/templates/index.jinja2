@@ -2,75 +2,91 @@
 
 {% block content %}
     {% if request.user.is_authenticated() %}
-        <div class="row equal">
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Счета</div>
-                    {% if accounts %}
-                        <table class="table table-sm">
-                            <thead class="thead-inverse">
-                                <tr>
-                                    <th class="col-md-6">Имя</th>
-                                    <th class="col-md-4">Сумма</th>
-                                    <th class="col-md-2"></th>
-                                </tr>
-                            </thead>
-                            {% for acc in accounts %}
-                                {% if acc.status == 'A' %}
-                                <tbody>
-                                    <tr>
-                                        <td>{{ acc.name}}</td>
-                                        <td>{{ acc.score}}</td>
-                                        <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="/account/update/{{ acc.id }}" class="btn btn-sm btn-outline-info">
-                                                    <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                                                </a>
-                                                <button
-                                                        class="btn btn-sm btn-outline-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#deleteAccount"
-                                                        data-account="{{acc.name}} {{acc.id}}"
-                                                 ><span class="glyphicon glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-                                                 </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                {% endif %}
-                            {% endfor %}
-                        </table>
-                        <div class="panel-body">
-                            <h4>Итого: {{ accounts_sum.score__sum }}</h4>
-                        </div>
-                    {% else %}
-                        <div class="panel-body">
-                            счетов нет
-                        </div>
-                    {% endif %}
-                    <div class="panel-footer">
-                        <button class="btn btn-primary" data-toggle="modal" data-target="#newAccount">Добавить счет</button>
-                    </div>
+        <div class="row">
+          <div class="com-md-12">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                  <h4 class="panel-title">
+                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                      Счета
+                    </a>
+                  </h4>
                 </div>
-            </div>
-            <!-- Panel 2 -->
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading">За месяц</div>
-                    <div class="panel-body">
-                        <p>Всего пришло: {{ total_incom.amount__sum or 0 }}</p>
-                        <p>Всего потрачено: {{ total_cost.amount__sum or 0 }}</p>
-                    </div>
-                    <div class="panel-footer ">
-                        <a href="/balance/add/?type=I" class="btn btn-primary">Добавить доход</a>
-                        <a href="/balance/add/?type=C" class="btn btn-primary">Добавить расход</a>
-                    </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                  {% if accounts %}
+                      <table class="table table-sm">
+                          <thead class="thead-inverse">
+                              <tr>
+                                  <th class="col-md-6">Имя</th>
+                                  <th class="col-md-4">Сумма</th>
+                                  <th class="col-md-2"></th>
+                              </tr>
+                          </thead>
+                          {% for acc in accounts %}
+                              {% if acc.status == 'A' %}
+                              <tbody>
+                                  <tr>
+                                      <td>{{ acc.name}}</td>
+                                      <td>{{ acc.score}}</td>
+                                      <td>
+                                          <div class="btn-group" role="group">
+                                              <a href="/account/update/{{ acc.id }}" class="btn btn-sm btn-outline-info">
+                                                  <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                              </a>
+                                              <button
+                                                      class="btn btn-sm btn-outline-danger"
+                                                      data-toggle="modal"
+                                                      data-target="#deleteAccount"
+                                                      data-account="{{acc.name}} {{acc.id}}"
+                                               ><span class="glyphicon glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                               </button>
+                                          </div>
+                                      </td>
+                                  </tr>
+                              </tbody>
+                              {% endif %}
+                          {% endfor %}
+                      </table>
+                      <div class="panel-body">
+                          <h4>Итого: {{ accounts_sum.score__sum }}</h4>
+                      </div>
+                  {% else %}
+                      <div class="panel-body">
+                          счетов нет
+                      </div>
+                  {% endif %}
+                  <div class="panel-footer">
+                      <button class="btn btn-primary" data-toggle="modal" data-target="#newAccount">Добавить счет</button>
+                  </div>
                 </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                  <h4 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                      За месяц
+                    </a>
+                  </h4>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">
+                      <p>Всего пришло: {{ total_incom.amount__sum or 0 }}</p>
+                      <p>Всего потрачено: {{ total_cost.amount__sum or 0 }}</p>
+                  </div>
+                  <div class="panel-footer ">
+                      <a href="/balance/add/?type=I" class="btn btn-primary">Добавить доход</a>
+                      <a href="/balance/add/?type=C" class="btn btn-primary">Добавить расход</a>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
 
         <div class="row">
-            <table class="table">
+            <table class="table table-bordered">
                 <thead>
                     <tr>
                       <th>Дата</th>
@@ -83,7 +99,7 @@
                 </thead>
                 <tbody>
                   {% for item in balance %}
-                    <tr>
+                    <tr class="{{ 'success' if item.operation=='I' else 'danger' }}">
                       <td>{{ item.date }}</td>
                       <td>{{ item.account.name }}</td>
                       <td>{{ item.category }}</td>
