@@ -1,4 +1,4 @@
-import datetime
+.import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
@@ -129,6 +129,15 @@ class BalanceUpdate(UpdateView):
 class BalanceDelete(DeleteView):
     model = models.Balance
     success_url = '/'
+
+    def delete(self, request, *args, **kwargs):
+        balance = models.Balance.objects.get(pk=kwargs['pk'])
+        if balance.operation == 'C':
+            balance.account.score += balance.amount
+        else:
+            balance.account.score -= balance.amount
+        balance.account.save()
+        return super(BalanceDelete, self).delete(request, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)

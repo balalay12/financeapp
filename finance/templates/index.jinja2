@@ -100,7 +100,7 @@
                 <tbody>
                   {% for item in balance %}
                     <tr class="{{ 'success' if item.operation=='I' else 'danger' }}">
-                      <td>{{ item.date }}</td>
+                      <td>{{ item.date.strftime('%d.%m.%Y') }}</td>
                       <td>{{ item.account.name }}</td>
                       <td>{{ item.category }}</td>
                       <td>{{ item.amount }}</td>
