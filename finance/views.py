@@ -1,4 +1,4 @@
-.import datetime
+import datetime
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
@@ -42,24 +42,27 @@ class Index(ListView):
     template_name = 'index.jinja2'
     accounts = {}
     balance = {}
+    date = datetime.date.today()
 
     def get_queryset(self):
         self.accounts = models.Accounts.objects.filter(owner=self.request.user.id)
-        self.balance = models.Balance.objects.filter(user=self.request.user.id)
+        if self.request.GET.get('prev', False):
+            self.date = datetime.date.today() - datetime.timedelta(int(self.request.GET['prev'])*365/12)
+        if self.request.GET.get('next', False):
+            self.date = datetime.date.today() + datetime.timedelta(int(self.request.GET['next'])*365/12)
+        self.balance = models.Balance.objects.filter(
+            user=self.request.user.id,
+            date__month=self.date.month,
+            date__year=self.date.year)
 
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
         ctx['accounts'] = self.accounts
         ctx['accounts_sum'] = self.accounts.filter(status='A').aggregate(Sum('score'))
         ctx['balance'] = self.balance
-        ctx['total_cost'] = self.balance.filter(
-            operation='C',
-            date__month=datetime.date.today().month,
-            date__year=datetime.date.today().year).aggregate(Sum('amount'))
-        ctx['total_incom'] = self.balance.filter(
-            operation='I',
-            date__month=datetime.date.today().month,
-            date__year=datetime.date.today().year).aggregate(Sum('amount'))
+        ctx['total_cost'] = self.balance.filter(operation='C').aggregate(Sum('amount'))
+        ctx['total_incom'] = self.balance.filter(operation='I').aggregate(Sum('amount'))
+
         return ctx
 
 

@@ -86,38 +86,54 @@
         </div>
 
         <div class="row">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                      <th>Дата</th>
-                      <th>Счет</th>
-                      <th>Категория</th>
-                      <th>Сумма</th>
-                      <th>Операция</th>
-                      <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                  {% for item in balance %}
-                    <tr class="{{ 'success' if item.operation=='I' else 'danger' }}">
-                      <td>{{ item.date.strftime('%d.%m.%Y') }}</td>
-                      <td>{{ item.account.name }}</td>
-                      <td>{{ item.category }}</td>
-                      <td>{{ item.amount }}</td>
-                      <td>{{ item.get_operation_display() }}</td>
-                      <td>
-                        <a href="/balance/update/{{ item.id }}/?type={{ item.operation}}" class="btn btn-sm btn-outline-info">
-                            <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
-                        </a></td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-            </table>
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <div class="panel-heading text-center">
+                <div class="btn-group" role="group" aria-label="...">
+                  <a href="/?prev={{ 1 if not request.GET['prev'] else request.GET['prev']|int + 1 }}" type="button" class="btn btn-default">Пердыдущий</a>
+                  <a href="/" type="button" class="btn btn-default">Сегодня</a>
+                  <a href="/?next={{ 1 if not request.GET['next'] else request.GET['next']|int + 1 }}" type="button" class="btn btn-default">Следующий</a>
+                </div>
+              </div>
+
+              <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                        <th>Дата</th>
+                        <th>Счет</th>
+                        <th>Категория</th>
+                        <th>Сумма</th>
+                        <th>Операция</th>
+                        <th></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {% for item in balance %}
+                      <tr class="{{ 'success' if item.operation=='I' else 'danger' }}">
+                        <td>{{ item.date.strftime('%d.%m.%Y') }}</td>
+                        <td>{{ item.account.name }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.amount }}</td>
+                        <td>{{ item.get_operation_display() }}</td>
+                        <td>
+                          <a href="/balance/update/{{ item.id }}/?type={{ item.operation}}" class="btn btn-sm btn-outline-info">
+                              <span class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                          </a></td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+          </div>
         </div>
     {% else %}
+    <div class="row">
+      <div class="col-md-12">
         <h1>Вы не авторизованы</h1>
         <h3>Если у вас уже есть учетная запись, то перейдите на страницу <a href="/login/">входа</a></h3>
         <h3>Если у вас еще нет учетной записи, то перейдите на страницу <a href="/registration/">регистрации</a></h3>
+      </div>
+    </div>
     {% endif %}
 
 <!-- Modal -->
