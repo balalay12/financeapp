@@ -90,9 +90,9 @@
             <div class="panel panel-default">
               <div class="panel-heading text-center">
                 <div class="btn-group" role="group" aria-label="...">
-                  <a href="/?prev={{ 1 if not request.GET['prev'] else request.GET['prev']|int + 1 }}" type="button" class="btn btn-default">Пердыдущий</a>
-                  <a href="/" type="button" class="btn btn-default">Сегодня</a>
-                  <a href="/?next={{ 1 if not request.GET['next'] else request.GET['next']|int + 1 }}" type="button" class="btn btn-default">Следующий</a>
+                  <a href="/?prev=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">Пердыдущий</a>
+                  <a href="/" type="button" class="btn btn-default">{{ today.strftime('%B %Y') }}</a>
+                  <a href="/?next=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">Следующий</a>
                 </div>
               </div>
 

@@ -1,4 +1,5 @@
 import datetime
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
@@ -47,9 +48,9 @@ class Index(ListView):
     def get_queryset(self):
         self.accounts = models.Accounts.objects.filter(owner=self.request.user.id)
         if self.request.GET.get('prev', False):
-            self.date = datetime.date.today() - datetime.timedelta(int(self.request.GET['prev'])*365/12)
+            self.date = datetime.datetime.strptime(self.request.GET['date'], '%Y-%m-%d') - relativedelta(months=+1)
         if self.request.GET.get('next', False):
-            self.date = datetime.date.today() + datetime.timedelta(int(self.request.GET['next'])*365/12)
+            self.date = datetime.datetime.strptime(self.request.GET['date'], '%Y-%m-%d') + relativedelta(months=+1)
         self.balance = models.Balance.objects.filter(
             user=self.request.user.id,
             date__month=self.date.month,
@@ -62,7 +63,7 @@ class Index(ListView):
         ctx['balance'] = self.balance
         ctx['total_cost'] = self.balance.filter(operation='C').aggregate(Sum('amount'))
         ctx['total_incom'] = self.balance.filter(operation='I').aggregate(Sum('amount'))
-
+        ctx['today'] = self.date
         return ctx
 
 
