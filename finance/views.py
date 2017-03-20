@@ -4,10 +4,33 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic import ListView
 from django.views.generic.base import RedirectView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from . import forms, models
+
+
+class CheckAuth(object):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login/')
+        return super(CheckAuth, self).dispatch(request, *args, **kwargs)
+
+
+class CheckAccountOwner(CheckAuth):
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.owner == request.user:
+            return HttpResponseForbidden()
+        return super(CheckAccountOwner, self).dispatch(request, *args, **kwargs)
+
+class CheckBalanceUser(CheckAuth):
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object.user == request.user:
+            return HttpResponseForbidden()
+        return super(CheckBalanceUser, self).dispatch(request, *args, **kwargs)
 
 
 class UserLogin(FormView):
@@ -67,7 +90,7 @@ class Index(ListView):
         return ctx
 
 
-class AccountsCreate(CreateView):
+class AccountsCreate(CheckAuth, CreateView):
     model = models.Accounts
     fields = ('name', 'score')
     success_url = '/'
@@ -77,24 +100,26 @@ class AccountsCreate(CreateView):
         return super(AccountsCreate, self).form_valid(form)
 
 
-class AccountUpdate(UpdateView):
+class AccountUpdate(CheckAccountOwner, UpdateView):
     model = models.Accounts
     fields = ['name', 'score']
     template_name = 'forms/accounts_update_form.jinja2'
     success_url = '/'
 
 
-class AccountDelete(RedirectView):
+class AccountDelete(CheckAuth, RedirectView):
     url = '/'
 
     def get(self, request, *args, **kwargs):
         account = models.Accounts.objects.get(pk=kwargs['pk'])
+        if account.owner is not request.user:
+            return HttpResponseForbidden()
         account.status = 'I'
         account.save()
         return super(AccountDelete, self).get(request, *args, **kwargs)
 
 
-class BalanceCreate(CreateView):
+class BalanceCreate(CheckAuth, CreateView):
     model = models.Balance
     template_name = 'forms/balance_new_form.jinja2'
     success_url = '/'
@@ -114,7 +139,7 @@ class BalanceCreate(CreateView):
         return ctx
 
 
-class BalanceUpdate(UpdateView):
+class BalanceUpdate(CheckBalanceUser, UpdateView):
     model = models.Balance
     form_class = forms.BalanceUpdateForm
     success_url = '/'
@@ -130,12 +155,12 @@ class BalanceUpdate(UpdateView):
         return ctx
 
 
-class BalanceDelete(DeleteView):
+class BalanceDelete(CheckBalanceUser, DeleteView):
     model = models.Balance
     success_url = '/'
 
     def delete(self, request, *args, **kwargs):
-        balance = models.Balance.objects.get(pk=kwargs['pk'])
+        balance = self.get_object()
         if balance.operation == 'C':
             balance.account.score += balance.amount
         else:
