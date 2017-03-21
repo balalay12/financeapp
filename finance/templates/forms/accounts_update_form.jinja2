@@ -2,6 +2,7 @@
 
 {% block content %}
     <form class="form-signin" method="POST">
+        <h3 class="form-heading">Редактирование счета</h3>
         <div class="form-group">
             <label for="inputName" class="sr-only">Название</label>
             <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="" value="{{ accounts.name }}">
@@ -14,4 +15,7 @@
         <a href="/" class="btn btn-secondary">Закрыть</a>
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
+
+    {% include 'form_errors.jinja2' %}
+
 {% endblock %}

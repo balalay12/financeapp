@@ -1,6 +1,19 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm
-from .models import Balance
+from .models import Balance, Accounts
+
+
+class AccountsForm(ModelForm):
+    class Meta:
+        model = Accounts
+        fields = ('name', 'score')
+
+    def clean(self):
+        cleaned_data = super(AccountsForm, self).clean()
+        score = cleaned_data['score']
+        if score <= 0:
+            raise ValidationError('Сумма не може быть меньше или равна 0')
+        return cleaned_data
 
 
 class BalanceForm(ModelForm):
@@ -12,6 +25,8 @@ class BalanceForm(ModelForm):
         cleaned_data = super(BalanceForm, self).clean()
         account = cleaned_data['account']
         amount = cleaned_data['amount']
+        if amount <= 0:
+            raise ValidationError('Сумма не може быть меньше или равна 0')
         if cleaned_data['operation'] == 'C':
             if account.score < amount:
                 raise ValidationError('Недостаточная сумма на счету')
@@ -32,6 +47,8 @@ class BalanceUpdateForm(ModelForm):
         cleaned_data = super(BalanceUpdateForm, self).clean()
         account = cleaned_data['account']
         amount = cleaned_data['amount']
+        if amount <= 0:
+            raise ValidationError('Сумма не може быть меньше или равна 0')
         if cleaned_data['operation'] == 'C':
             if account.id is not self.instance.account.id:
                 if account.score < amount:

@@ -1,29 +1,21 @@
-<div class="modal fade" id="newAccount" tabindex="-1" role="dialog" aria-labelledby="newAccountLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="newAccountLabel">Новый счет</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <form action="/accounts/add/" method="POST">
-        <div class="modal-body">
-            <div class="form-group">
-                <label for="inputName" class="sr-only">Название</label>
-                <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="">
-            </div>
-            <div class="form-group">
-                <label for="inputScore" class="sr-only">Сумма</label>
-                <input id="inputScore" name="score" type="number"  class="form-control" placeholder="Сумма" required="">
-            </div>
-        </div>
+{% extends 'base.jinja2' %}
+
+{% block content %}
+      <form class="form-signin" method="POST">
+          <h3 class="form-heading">Новый счет</h3>
+          <div class="form-group">
+              <label for="inputName" class="sr-only">Название</label>
+              <input id="inputName" name="name" type="text"  class="form-control" placeholder="Название" required="">
+          </div>
+          <div class="form-group">
+              <label for="inputScore" class="sr-only">Сумма</label>
+              <input id="inputScore" name="score" type="number"  class="form-control" placeholder="Сумма" required="">
+          </div>
         <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <a href="/" class="btn btn-secondary">Закрыть</a>
             <button type="submit" class="btn btn-primary">Сохранить</button>
-        </div>
       </form>
-    </div>
-  </div>
-</div>
+
+      {% include 'form_errors.jinja2' %}
+
+{% endblock %}

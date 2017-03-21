@@ -101,7 +101,8 @@ class Index(ListView):
 
 class AccountsCreate(CheckAuth, CreateView):
     model = models.Accounts
-    fields = ('name', 'score')
+    form_class = forms.AccountsForm
+    template_name = 'forms/accounts_new_form.jinja2'
     success_url = '/'
 
     def form_valid(self, form):
@@ -111,7 +112,7 @@ class AccountsCreate(CheckAuth, CreateView):
 
 class AccountUpdate(CheckAccountOwner, UpdateView):
     model = models.Accounts
-    fields = ['name', 'score']
+    form_class = forms.AccountsForm
     template_name = 'forms/accounts_update_form.jinja2'
     success_url = '/'
 
