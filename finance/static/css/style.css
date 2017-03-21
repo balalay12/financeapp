@@ -27,20 +27,3 @@
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
-
-.equal {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-}
-
-div[class*='col-'] {
-  flex:1 1 auto;
-  /*background: lightblue;*/
-  display: flex;
-}
-.panel {
-  flex:1 0 100%;
-}
