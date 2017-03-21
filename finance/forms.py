@@ -34,7 +34,7 @@ class BalanceUpdateForm(ModelForm):
         amount = cleaned_data['amount']
         if cleaned_data['operation'] == 'C':
             if account.id is not self.instance.account.id:
-                if  account.score < amount:
+                if account.score < amount:
                     raise ValidationError('Недостаточная сумма на счету')
                 self.instance.account.score += self.instance.amount
                 account.score -= amount

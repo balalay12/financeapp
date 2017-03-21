@@ -23,7 +23,9 @@ class CheckAccountOwner(CheckAuth):
         self.object = self.get_object()
         if not self.object.owner == request.user:
             return HttpResponseForbidden()
-        return super(CheckAccountOwner, self).dispatch(request, *args, **kwargs)
+        return super(CheckAccountOwner, self).dispatch(
+            request, *args, **kwargs)
+
 
 class CheckBalanceUser(CheckAuth):
     def dispatch(self, request, *args, **kwargs):
@@ -69,11 +71,14 @@ class Index(ListView):
     date = datetime.date.today()
 
     def get_queryset(self):
-        self.accounts = models.Accounts.objects.filter(owner=self.request.user.id)
+        self.accounts = models.Accounts.objects.filter(
+            owner=self.request.user.id)
         if self.request.GET.get('prev', False):
-            self.date = datetime.datetime.strptime(self.request.GET['date'], '%Y-%m-%d') - relativedelta(months=+1)
+            self.date = datetime.datetime.strptime(
+                self.request.GET['date'], '%Y-%m-%d') - relativedelta(months=+1)
         if self.request.GET.get('next', False):
-            self.date = datetime.datetime.strptime(self.request.GET['date'], '%Y-%m-%d') + relativedelta(months=+1)
+            self.date = datetime.datetime.strptime(
+                self.request.GET['date'], '%Y-%m-%d') + relativedelta(months=+1)
         self.balance = models.Balance.objects.filter(
             user=self.request.user.id,
             date__month=self.date.month,
@@ -82,10 +87,14 @@ class Index(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
         ctx['accounts'] = self.accounts
-        ctx['accounts_sum'] = self.accounts.filter(status='A').aggregate(Sum('score'))
+        ctx['accounts_sum'] = self.accounts.filter(
+            status='A').aggregate(Sum('score'))
         ctx['balance'] = self.balance
-        ctx['total_cost'] = self.balance.filter(operation='C').aggregate(Sum('amount'))
-        ctx['total_incom'] = self.balance.filter(operation='I').aggregate(Sum('amount'))
+        ctx['total_cost'] = self.balance.filter(
+            operation='C').aggregate(
+            Sum('amount'))
+        ctx['total_incom'] = self.balance.filter(
+            operation='I').aggregate(Sum('amount'))
         ctx['today'] = self.date
         return ctx
 

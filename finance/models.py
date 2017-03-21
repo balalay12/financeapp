@@ -5,16 +5,18 @@ OPERATIONS_TYPE = (
     ('C', 'Расход')
 )
 
+
 class Categories(models.Model):
     name = models.CharField(max_length=250)
-    operation_type = models.CharField(max_length=1, choices=OPERATIONS_TYPE, default='C')
+    operation_type = models.CharField(
+        max_length=1, choices=OPERATIONS_TYPE, default='C')
 
     def __str__(self):
         return self.name
 
 
 class Accounts(models.Model):
-    STATUS=(
+    STATUS = (
         ('I', 'Не используется'),
         ('A', 'Используется')
     )
