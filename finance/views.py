@@ -82,7 +82,7 @@ class Index(ListView):
         self.balance = models.Balance.objects.filter(
             user=self.request.user.id,
             date__month=self.date.month,
-            date__year=self.date.year)
+            date__year=self.date.year).order_by('date')
 
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
