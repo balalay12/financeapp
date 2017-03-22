@@ -3,8 +3,9 @@ $('#deleteAccount').on('show.bs.modal', function(event) {
     var data = button.data('account')
     acc = data.split(' ')
     var modal = $(this);
-    modal.find('.modal-body p').text('Вы уверены что хотите удалить счет "' + acc[0] + '"')
-    $('#deleteAccountForm').attr('action', '/account/delete/' + acc[1] + '/')
+    var id = acc.pop()
+    modal.find('.modal-body p').text('Вы уверены что хотите удалить счет "' + acc.join(' ') + '"')
+    $('#deleteAccountForm').attr('action', '/account/delete/' + id + '/')
 });
 
 $('.datepicker').datepicker({
