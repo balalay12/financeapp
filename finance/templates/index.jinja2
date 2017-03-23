@@ -90,13 +90,17 @@
             <div class="panel panel-default">
               <div class="panel-heading text-center">
                 <div class="btn-group" role="group" aria-label="...">
-                  <a href="/?prev=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">Пердыдущий</a>
+                  <a href="/?prev=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                  </a>
                   <a href="/" type="button" class="btn btn-default">{{ today.strftime('%B %Y') }}</a>
-                  <a href="/?next=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">Следующий</a>
+                  <a href="/?next=True&date={{ today.strftime('%Y-%m-%d') }}" type="button" class="btn btn-default">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                  </a>
                 </div>
               </div>
 
-              <table class="table table-bordered">
+              <table class="table table-bordered table-responsive">
                   <thead>
                       <tr>
                         <th>Дата</th>
