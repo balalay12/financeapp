@@ -5,8 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.views.generic import ListView
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 from django.views.generic.edit import FormView, CreateView, UpdateView, DeleteView
 from . import forms, models
 
@@ -64,38 +63,34 @@ class UserLogout(RedirectView):
         return super(UserLogout, self).get(request, *args, **kwargs)
 
 
-class Index(ListView):
+class Index(TemplateView):
     template_name = 'index.jinja2'
-    accounts = {}
-    balance = {}
-    date = datetime.date.today()
-
-    def get_queryset(self):
-        self.accounts = models.Accounts.objects.filter(
-            owner=self.request.user.id)
-        if self.request.GET.get('prev', False):
-            self.date = datetime.datetime.strptime(
-                self.request.GET['date'], '%Y-%m-%d') - relativedelta(months=+1)
-        if self.request.GET.get('next', False):
-            self.date = datetime.datetime.strptime(
-                self.request.GET['date'], '%Y-%m-%d') + relativedelta(months=+1)
-        self.balance = models.Balance.objects.filter(
-            user=self.request.user.id,
-            date__month=self.date.month,
-            date__year=self.date.year).order_by('date')
 
     def get_context_data(self, **kwargs):
         ctx = super(Index, self).get_context_data(**kwargs)
-        ctx['accounts'] = self.accounts
-        ctx['accounts_sum'] = self.accounts.filter(
+        date = datetime.date.today()
+        accounts = models.Accounts.objects.filter(
+            owner=self.request.user.id)
+        if self.request.GET.get('prev', False):
+            date = datetime.datetime.strptime(
+                self.request.GET['date'], '%Y-%m-%d') - relativedelta(months=+1)
+        if self.request.GET.get('next', False):
+            date = datetime.datetime.strptime(
+                self.request.GET['date'], '%Y-%m-%d') + relativedelta(months=+1)
+        balance = models.Balance.objects.filter(
+            user=self.request.user.id,
+            date__month=date.month,
+            date__year=date.year).order_by('date')
+        ctx['accounts'] = accounts
+        ctx['accounts_sum'] = accounts.filter(
             status='A').aggregate(Sum('score'))
-        ctx['balance'] = self.balance
-        ctx['total_cost'] = self.balance.filter(
+        ctx['balance'] = balance
+        ctx['total_cost'] = balance.filter(
             operation='C').aggregate(
             Sum('amount'))
-        ctx['total_incom'] = self.balance.filter(
+        ctx['total_incom'] = balance.filter(
             operation='I').aggregate(Sum('amount'))
-        ctx['today'] = self.date
+        ctx['today'] = date
         return ctx
 
 
